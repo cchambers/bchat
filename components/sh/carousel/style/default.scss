@@ -1,0 +1,46 @@
+/* default styling */
+
+
+.sh-carousel {
+    position: relative;
+    .controls {
+      > * {
+        height: 4.5rem;
+        color: use(lowlight-primary);
+        display: flex;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: absolute;
+        // border-radius: 5px;
+        outline: 0;
+        border: 1px solid use(highlight-primary);
+        background: use(highlight-primary);
+      }
+
+      .dots {
+        position: absolute;
+        bottom: -6rem;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .play {
+        top: -6rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6rem;
+      }
+
+      .arrow {
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4.5rem;
+      }
+    }
+
+  ::slotted(*) {
+    display: none;
+  }
+}

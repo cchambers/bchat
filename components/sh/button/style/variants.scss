@@ -1,0 +1,69 @@
+.sh-button[variant="primary"] {
+  --sh-button-back: var(--lowlight-tertiary);
+  --sh-button-color-active: var(--lowlight-tertiary);
+  --sh-button-back-active: var(--accent-tertiary);
+  --sh-button-back-glow: var(--accent-tertiary);
+  --sh-button-back-hover: var(--lowlight-primary);
+  --sh-button-border-radius: 0.4rem;
+  --sh-button-color: var(--highlight-primary);
+  --sh-button-color-hover: var(--accent-tertiary);
+  --sh-button-font-size: 1.8rem;
+  --sh-button-back-disabled: var(--accent-quaternary);
+  --sh-button-color-disabled: var(--highlight-primary);
+}
+
+.sh-button[variant="secondary"] {
+  --sh-button-back: var(--accent-primary);
+  --sh-button-back-hover: var(--accent-tertiary);
+  --sh-button-border-radius: 5px;
+  // --sh-button-box-shadow-hover: inset 2px 0px 0 var(--accent-secondary), inset -2px 0px 0 var(--accent-secondary),
+  //   inset 0px 2px 0 var(--accent-secondary), inset 0px -2px 0 var(--accent-secondary);
+  --sh-button-color: var(--lowlight-tertiary);
+  --sh-button-color-hover: var(--lowlight-tertiary);
+  --sh-button-style: solid;
+  --sh-button-font-size: 1.8rem;
+  // --sh-button-box-shadow: inset 1px 0px 0 var(--accent-secondary), inset -1px 0px 0 var(--accent-secondary),
+  //   inset 0px 1px 0 var(--accent-secondary), inset 0px -1px 0 var(--accent-secondary);
+
+  // --sh-button-color-disabled: var(--lowlight-secondary);
+  // --sh-button-box-shadow-disabled: inset 1px 0px 0 var(--lowlight-secondary), inset -1px 0px 0 var(--lowlight-secondary),
+  //   inset 0px 1px 0 var(--lowlight-secondary), inset 0px -1px 0 var(--lowlight-secondary);
+}
+
+.sh-button[variant="tertiary"] {
+  --sh-button-back: var(--transparent);
+  --sh-button-back-hover: var(--accent-quaternary);
+  --sh-button-border-radius: 5px;
+  --sh-button-back-active: var(--accent-secondary);
+  // --sh-button-box-shadow: inset 1px 0px 0 var(--accent-quaternary), inset -1px 0px 0 var(--accent-quaternary),
+  //   inset 0px 1px 0 var(--accent-quaternary), inset 0px -1px 0 var(--accent-quaternary);
+  // --sh-button-box-shadow-hover: inset 2px 0px 0 var(--accent-quaternary), inset -2px 0px 0 var(--accent-quaternary),
+  //   inset 0px 2px 0 var(--accent-quaternary), inset 0px -2px 0 var(--accent-quaternary);
+  --sh-button-color: var(--accent-quaternary);
+  --sh-button-color-hover: var(--lowlight-tertiary);
+  --sh-button-color-active: var(--accent-secondary);
+  --sh-button-style: solid;
+  --sh-button-font-size: 1.8rem;
+
+  --sh-button-color-disabled: var(--lowlight-secondary);
+  --sh-button-box-shadow-disabled: inset 1px 0px 0 var(--lowlight-secondary), inset -1px 0px 0 var(--lowlight-secondary),
+    inset 0px 1px 0 var(--lowlight-secondary), inset 0px -1px 0 var(--lowlight-secondary);
+
+  --sh-button-active-glow: var(--accent-quaternary);
+}
+
+.sh-button[variant="quaternary"] {
+  --sh-button-back: var(--lowlight-quaternary);
+  --sh-button-back-active: var(--accent-tertiary);
+  --sh-button-back-hover: var(--highlight-primary);
+  --sh-button-border-radius: 5px;
+  --sh-button-border-color: var(--highlight-primary);
+  --sh-button-color-hover: var(--lowlight-tertiary);
+  --sh-button-border-style: solid;
+  --sh-button-border-width: 1px;
+  --sh-button-color: var(--highlight-primary);
+  --sh-button-font-size: 1.8rem;
+
+  --sh-button-back-disabled: var(--accent-quaternary);
+  --sh-button-color-disabled: var(--highlight-primary);
+}

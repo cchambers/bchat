@@ -1,0 +1,96 @@
+$base: 3.2;
+$rem: #{$base}rem;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$decel: cubic-bezier(0, 0, 0.2, 1);
+$accel: cubic-bezier(0.4, 0, 1, 1);
+
+$breakpoints: (
+  "desktop": 800px,
+);
+
+$config: (
+  breakpoints: (
+    "desktop": 800px,
+  ),
+  box-model-mods: (
+    "pad": "padding",
+    "margin": "margin",
+    "pull": "margin",
+  ),
+  edges: (
+    "y": (
+      "-top",
+      "-bottom",
+    ),
+    "x": (
+      "-left",
+      "-right",
+    ),
+    "t": (
+      "-top",
+    ),
+    "b": (
+      "-bottom",
+    ),
+    "l": (
+      "-left",
+    ),
+    "r": (
+      "-right",
+    ),
+  ),
+  mod-amounts: (
+    "-sss": #{calc($base/8)}rem,
+    "-ss": #{calc($base/4)}rem,
+    "-s": #{calc($base/2)}rem,
+    "": $rem,
+    "-a": #{$base * 1.5}rem,
+    "-aa": #{$base * 2}rem,
+    "-aaa": #{$base * 2.5}rem,
+  ),
+  mod-amount-search: (
+    "sss": #{calc($base/8)}rem,
+    "ss": #{calc($base/4)}rem,
+    "s": #{calc($base/2)}rem,
+    "base": $rem,
+    "a": #{$base * 1.5}rem,
+    "aa": #{$base * 2}rem,
+    "aaa": #{$base * 2.5}rem,
+  ),
+  colors: (
+    transparent: transparent,
+    highlight-primary: #feffff,
+    highlight-secondary: #a5aebd,
+    highlight-tertiary: #484b54,
+    highlight-quaternary: #cbd5e1,
+
+    // lowlight-primary: #020617,
+    // lowlight-secondary: #0f172a,
+    // lowlight-tertiary: #334155,
+    // accent-primary: #284b63,
+    // accent-secondary: #3c6e71,
+    // accent-tertiary: #fad02c,
+    // accent-quaternary: #ef27a6,
+    accent-primary: #ed1e79,
+    accent-secondary: #7270b0,
+    accent-tertiary: #e6458a,
+    accent-quaternary: #c8c6fc,
+    lowlight-primary: #16171b,
+    lowlight-secondary: #1f2025,
+    lowlight-tertiary: #222328,
+    lowlight-quaternary: #121316,
+
+    state-success: #65a30d,
+    state-caution: #fde047,
+    state-error: #be123c,
+  ),
+  transitions: (
+    "decel": all 200ms $decel,
+  ),
+);
+
+$colors: map-get($config, colors);
+$mod-amounts: map-get($config, mod-amounts);
+$mod-amount-search: map-get($config, mod-amount-search);
+$box-model-mods: map-get($config, box-model-mods);
+$edges: map-get($config, edges);

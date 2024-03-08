@@ -1,0 +1,130 @@
+@function is-list($var) {
+  @return type-of($var) == "list";
+}
+
+// color classes
+@each $name, $hex in $colors {
+  $var: map-get($colors, $name);
+
+  .#{"" + $name},
+  .color-#{"" + $name} {
+    color: $var;
+    color: var(--#{"" + $name});
+  }
+
+  .back-#{"" + $name} {
+    background-color: $var;
+    background-color: var(--#{"" + $name});
+  }
+
+  .hover-#{"" + $name}:hover {
+    color: $var;
+    color: var(--#{"" + $name});
+  }
+
+  .hover-back-#{"" + $name}:hover {
+    background-color: $var;
+    background-color: var(--#{"" + $name});
+  }
+
+  .border-#{"" + $name} {
+    border-color: $var;
+    border-color: var(--#{"" + $name});
+  }
+
+  .borders-#{"" + $name} [class*="border-"] {
+    border-color: $var;
+    border-color: var(--#{"" + $name});
+  }
+}
+
+[class*="hover-"] {
+  transition: background-color 200ms $decel;
+}
+
+$inv: "";
+$invclose: "";
+spacer {
+  display: block;
+  height: $rem;
+}
+@each $amt, $meas in $mod-amount-search {
+  spacer-#{$amt} {
+    display: block;
+    height: var(--#{$amt});
+  }
+}
+
+@each $mod, $prop in $box-model-mods {
+  @if $mod== "pull" {
+    $inv: "calc(-1 * ";
+    $invclose: ")";
+  } @else {
+    $inv: "";
+    $invclose: "";
+  }
+
+  @each $amt, $meas in $mod-amount-search {
+    .#{$mod}-#{$amt} {
+      #{$prop}: #{$inv}var(--#{$amt}) #{$invclose};
+    }
+
+    @each $name, $edge in $edges {
+      .#{$mod}-#{"" + $name}-#{$amt} {
+        @each $act in $edge {
+          #{$prop}#{$act}: #{$inv}var(--#{$amt}) #{$invclose};
+        }
+      }
+    }
+  }
+
+  .#{$mod} {
+    #{$prop}: #{$inv}var(--base) #{$invclose};
+  }
+
+  @each $edge, $actual in $edges {
+    @if is-list($actual) {
+      .#{$mod}-#{$edge} {
+        @each $side in $actual {
+          #{$prop}#{$side}: #{$inv}var(--base) #{$invclose};
+        }
+      }
+    } @else {
+      .#{$mod}-#{$edge} {
+        #{$prop}#{$actual}: #{$inv}var(--base) #{$invclose};
+      }
+    }
+  }
+}
+
+// breakpoint classes
+@each $level, $size in $breakpoints {
+  @media screen and (min-width: #{$size}) {
+    @each $l, $s in $breakpoints {
+      @if $l == $level {
+        .#{$l}-only {
+          display: initial;
+        }
+      } @else {
+        .#{$l}-only {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// font style classes
+@for $i from 1 through 100 {
+  $rem: (0.1 * $i);
+  .px-#{$i} {
+    font-size: #{$rem}rem;
+  }
+  .lh-#{$i} {
+    line-height: #{$rem}rem;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}

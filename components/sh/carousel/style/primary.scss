@@ -1,0 +1,143 @@
+/* primary variant */
+
+.sh-carousel[variant="primary"] {
+  .slides {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    &.config {
+      position: static;
+      ul > * {
+        height: auto;
+        position: static;
+      }
+    }
+    li > a,
+    li > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    ul > * {
+      display: block;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      left: 0;
+      top: 0;
+      transition: all 300ms $ease;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      &.active {
+        pointer-events: initial;
+        opacity: 1;
+      }
+    }
+  }
+
+  .controls {
+    > * {
+      background-color: rgba(255, 255, 255, 0.75);
+      position: absolute;
+    }
+    .play {
+      align-items: center;
+      bottom: 1.5rem;
+      border: 2px solid use(lowlight-quinary);
+      display: inline-flex;
+      justify-content: center;
+      left: 50%;
+      padding: 1rem;
+      top: unset;
+      transform: translateX(-50%);
+      width: auto;
+
+      button {
+        border: none;
+        background-color: transparent;
+        margin-right: 1rem;
+        color: use(lowlight-primary);
+      }
+    }
+    .arrow {
+      border: none;
+      color: use(lowlight-quinary);
+      height: 5.5rem;
+      width: 3.5rem;
+      &.next {
+        right: 0rem;
+      }
+      &.previous {
+        left: 0rem;
+      }
+    }
+    .dots {
+      bottom: unset;
+      display: flex;
+      position: relative;
+      left: unset;
+      margin-bottom: 0.4rem;
+      transform: unset;
+
+      li {
+        color: use(lowlight-quinary);
+        margin-right: 0.5rem;
+        position: relative;
+        opacity: 1;
+        font-size: 2.5rem;
+        &.active {
+          color: use(lowlight-primary);
+        }
+      }
+    }
+  }
+}
+
+.sh-carousel[resolution="4:3"] {
+  .carousel-spacer {
+    padding-top: 75%;
+  }
+}
+
+.sh-carousel[resolution="3:2"] {
+  .carousel-spacer {
+    padding-top: 66.66%;
+  }
+}
+
+.sh-carousel[resolution="16:9"] {
+  .carousel-spacer {
+    padding-top: 56.25%;
+  }
+}
+
+.sh-carousel[vertical] {
+  .controls {
+    .arrow {
+      .next {
+        color: red;
+      }
+
+      .previous {
+        color: red;
+      }
+    }
+  }
+}
+
+.sh-carousel[hide-controls] {
+  margin: 0;
+}
+
+.sh-carousel[hide-arrows] {
+  .slides {
+    ::slotted(ul) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}

@@ -1,0 +1,458 @@
+@import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Geologica&family=Orbitron:wght@400;600;700&family=Syne+Mono&family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap");
+@import url("https://fonts.cdnfonts.com/css/gg-sans-2");
+
+.font-primary {
+  font-family: "gg sans normal", sans-serif;
+}
+
+.font-secondary {
+  font-family: "Roboto Slab", serif;
+}
+
+.font-tertiary {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  background: use(highlight-primary);
+  color: use(lowlight-tertiary);
+  font-size: 1.6rem;
+  font-family: "gg sans normal", sans-serif;
+}
+
+strong {
+  font-family: "Roboto";
+  letter-spacing: 0.05rem;
+}
+
+section {
+  margin-bottom: use(a);
+}
+
+a {
+  color: use(accent-tertiary);
+  transition: all 120ms linear;
+  text-decoration: none;
+  &.button {
+    text-decoration: none;
+  }
+  &:hover {
+    color: use(accent-quaternary);
+  }
+}
+
+// .back-highlight-primary {
+//   a {
+//     color: use(accent-primary);
+//     &:hover {
+//       color: use(accent-secondary);
+//     }
+//   }
+// }
+
+button {
+  cursor: pointer;
+  background: transparent;
+  &:hover {
+    background: use(highlight-secondary);
+  }
+}
+
+dialog {
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  min-height: 6rem;
+  min-width: 32rem;
+  width: calc(100% - use(a));
+  max-height: 80vh;
+  max-width: 68rem;
+  border-radius: use(ss);
+  transform: translateX(-50%) translateY(-50%);
+  overscroll-behavior: contain;
+  background: use(lowlight-secondary);
+  @include box-shadow(4);
+  &::backdrop {
+    background: #16171b;
+    mix-blend-mode: color;
+  }
+  .close-trigger {
+    position: relative;
+    .sh-button {
+      font-size: 3rem;
+      padding: use(ss);
+      position: absolute;
+      right: 1.5rem;
+      top: 1.5rem;
+      min-height: 4.5rem;
+      min-width: 4.5rem;
+      border: none;
+      background: transparent;
+      outline: none;
+      border-radius: 50%;
+      box-shadow: none;
+      color: use(accent-primary);
+      &:hover {
+        box-shadow: none;
+      }
+      span {
+        font-size: inherit;
+      }
+    }
+  }
+}
+
+.radius-ss {
+  border-radius: use(ss);
+}
+
+.check-toggle {
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid use(accent-tertiary);
+    border-radius: use(ss);
+    padding: use(ss);
+    height: auto;
+    cursor: pointer;
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+  label.active {
+    background: use(accent-tertiary);
+    color: use(accent-primary);
+  }
+}
+
+.range {
+  display: flex;
+  margin-bottom: use(base);
+
+  .range-item {
+    input {
+      display: none;
+    }
+    &:first-child {
+      label {
+        border-radius: use(ss) 0 0 use(ss);
+      }
+    }
+
+    &:last-child {
+      label {
+        border-radius: 0 use(ss) use(ss) 0;
+      }
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 4.5rem;
+      padding: use(s) use(ss);
+      border: 1px solid use(accent-primary);
+      cursor: pointer;
+      transition: all 100ms linear;
+      height: auto;
+      font-size: 1.4rem;
+      white-space: pre;
+    }
+    input[disabled] ~ label {
+      cursor: default !important;
+    }
+
+    input:checked {
+      ~ label {
+        background: use(accent-tertiary);
+        color: use(accent-primary);
+        border: 1px solid use(accent-tertiary);
+      }
+    }
+  }
+}
+
+body:not(.user-is-tabbing) :focus {
+  outline: none;
+}
+/* Your focus style */
+body.user-is-tabbing :focus {
+  outline: 2px dashed use(accent-quaternary);
+}
+
+.controls {
+  list-style: none;
+  display: flex;
+  // flex-wrap: wrap;
+  li {
+    width: 25%;
+    flex-grow: 5;
+    flex-shrink: 2;
+    > .sh-button {
+      width: 100%;
+    }
+  }
+  .sh-button {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+
+    .actual-text span {
+      font-size: 1.4rem;
+    }
+  }
+}
+
+label {
+  display: flex;
+  font-family: "Geologica";
+  text-transform: uppercase;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="range"],
+textarea,
+select {
+  font-size: 2rem;
+  border-radius: use(sss);
+  min-height: 4.5rem;
+  padding: 0 use(ss);
+  color: use(lowlight-tertiary);
+  background: use(highlight-secondary);
+  border: 2px solid use(lowlight-tertiary);
+  max-width: 100%;
+  &[full] {
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
+input[type="file"] {
+  cursor: pointer;
+}
+
+textarea {
+  padding: use(ss);
+}
+
+input[type="number"] {
+  width: 10rem;
+}
+
+input[type="checkbox"] {
+  height: 2.2rem;
+  width: 2.2rem;
+}
+
+.directions {
+  padding: use(base) use(ss);
+  line-height: 1.5em;
+  font-size: 2rem;
+  li {
+    margin-top: use(s);
+  }
+
+  blockquote {
+    display: block;
+    padding: use(s);
+    background: use(lowlight-secondary);
+    border-radius: use(ss);
+    margin-top: use(s);
+  }
+}
+
+.select-group {
+  display: inline-flex;
+}
+
+.editor-toolbar {
+  background: use(highlight-primary);
+}
+
+.back-accent-primary .sh-button[variant="primary"] {
+  border: 1px dashed use(accent-tertiary);
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  nav {
+  }
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh); // - header height
+  width: 50%;
+  flex-grow: 2;
+  .content {
+    flex-grow: auto;
+    @include scroll-y;
+  }
+
+  footer {
+    padding: use(aa);
+    margin-top: auto;
+  }
+}
+
+hr {
+  height: 1px;
+  margin: use(base);
+  background: currentColor;
+}
+
+ul.flex-list {
+  list-style: none;
+  flex-direction: column;
+  li {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid use(lowlight-primary);
+    &:last-child {
+      border: none;
+    }
+  }
+  a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: use(ss) 0;
+  }
+
+  .item-date {
+    margin-left: auto;
+  }
+}
+
+h1,
+h2,
+h3 {
+  margin-bottom: 1.6rem;
+}
+
+blockquote {
+  padding: use(sss) use(s);
+  border-radius: use(ss);
+  color: use(highlight-primary);
+  background: use(lowlight-primary);
+}
+
+.scroll-y {
+  @include scroll-y;
+}
+.secondary-nav {
+  position: relative;
+  width: 26rem;
+  align-self: flex-start;
+  flex-shrink: 0;
+  background: use(lowlight-tertiary);
+  border-radius: use(ss);
+  color: use(highlight-primary);
+  padding: use(ss);
+  list-style: none;
+  button {
+    display: flex;
+    width: 100%;
+    background: transparent;
+    padding: use(ss);
+    align-items: center;
+    color: use(highlight-primary);
+    transition: all 200ms $decel;
+    &:hover {
+      background: use(accent-quaternary);
+      color: use(lowlight-tertiary);
+    }
+    &.active {
+      color: use(lowlight-tertiary);
+      background: use(accent-tertiary);
+    }
+  }
+}
+
+.vignette {
+  position: relative;
+
+  &::after {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: "";
+    height: 100%;
+    width: 100%;
+    background: radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.25) 150%), transparent;
+    pointer-events: none;
+    transition: all 400ms ease-in-out;
+  }
+
+  &:hover {
+    &::before {
+      opacity: 0.1;
+      transition: all 400ms ease-in-out;
+    }
+  }
+}
+.optional {
+  position: relative;
+  padding-bottom: use(s);
+  input,
+  select,
+  textarea {
+    border: 1px solid use(accent-quaternary);
+    border-bottom-left-radius: 0;
+    margin-bottom: -5px;
+  }
+  &::before {
+    content: "optional";
+    display: block;
+    position: absolute;
+    font-size: 1.2rem;
+    line-height: 1em;
+    background: use(accent-quaternary);
+    color: use(lowlight-tertiary);
+    bottom: -0.4rem;
+    left: 0;
+    padding: use(sss) use(ss);
+    border-bottom-left-radius: use(ss);
+    border-bottom-right-radius: use(ss);
+  }
+}
+
+.back-button {
+  color: use(accent-secondary);
+}
+
+.modal-scroll {
+  overflow: hidden;
+  line-height: 1.5em;
+  @include scroll-y;
+  max-height: 15rem !important;
+  padding: use(ss);
+  white-space: pre-wrap;
+  background: use(lowlight-primary);
+}
+
+.CodeMirror,
+.CodeMirror-scroll {
+  max-height: 40rem;
+}
+.CodeMirror-fullscreen.CodeMirror {
+  max-height: none;
+}
+
+.CodeMirror-fullscreen .CodeMirror-scroll {
+  max-height: none;
+}

@@ -1,0 +1,153 @@
+@mixin material-icons() {
+  font-family: "Material Icons" !important;
+  font-feature-settings: "liga";
+}
+
+@mixin material-icons-round() {
+  font-family: "Material Icons Round" !important;
+  font-feature-settings: "liga";
+}
+
+@mixin material-icons-outlined() {
+  font-family: "Material Icons Outlined" !important;
+  font-feature-settings: "liga";
+}
+
+@mixin text-glow($color: currentColor) {
+  text-shadow: 0 0 10px $color;
+}
+
+@mixin box-glow($color: currentColor) {
+  position: relative;
+  &:before {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: $color;
+    filter: blur(use(sss));
+    // mix-blend-mode: hard-light;
+    z-index: -1;
+    transform: translateZ(0);
+  }
+}
+
+@mixin fill() {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+@mixin custom-scroll-bar() {
+  &::-webkit-scrollbar {
+    border-radius: 10px;
+    height: 10px;
+    width: 0.8rem;
+    transition: all 200ms $decel;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: use(accent-tertiary);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+}
+
+@mixin scroll-y() {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
+  max-height: 100dvh;
+  @include custom-scroll-bar();
+}
+
+@mixin scroll-x() {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
+}
+
+@mixin background-opacity($color, $opacity: 0.3) {
+  background: $color; /* The Fallback */
+  background: rgba($color, $opacity);
+}
+
+// no scroll bar
+@mixin no-scroll-bar() {
+  &::-webkit-scrollbar {
+    height: 0;
+    width: 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 0;
+    width: 0;
+  }
+
+  &::-webkit-scrollbar-track {
+    height: 0;
+    width: 0;
+  }
+}
+
+@mixin scroll-bar() {
+  &::-webkit-scrollbar {
+    width: use(mm);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: use(lowlight-tertiary);
+    border-radius: use(mm);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: use(lowlight-primary);
+  }
+}
+
+@mixin box_shadow($level) {
+  @if $level == 1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  } @else if $level == 2 {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  } @else if $level == 3 {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  } @else if $level == 4 {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  } @else if $level == 5 {
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  }
+}
+
+@mixin text_shadow($level) {
+  @if $level == 1 {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  } @else if $level == 2 {
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  } @else if $level == 3 {
+    text-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  } @else if $level == 4 {
+    text-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  } @else if $level == 5 {
+    text-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  }
+}
+
+@mixin low {
+  @media screen and (max-width: breakpoint("desktop")) {
+    @content;
+  }
+}
+@mixin high {
+  @media screen and (min-width: breakpoint("desktop")) {
+    @content;
+  }
+}
