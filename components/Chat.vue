@@ -124,7 +124,7 @@ onMounted(async () => {
         <div class="message" v-if="m.type == 'embed'">
           <ChatEmbed :data="m.message" />
         </div>
-        <div class="message">{{ m.sender }}: {{ m.message }}</div>
+        <div class="message">{{ m.message }}</div>
       </div>
     </div>
     <div class="input" @keydown.enter.prevent="handleInput">
@@ -173,14 +173,14 @@ onMounted(async () => {
     }
     .customer {
       .message {
-        margin-left: auto;
+        margin-right: auto;
         background: use(accent-tertiary);
         color: use(highlight-primary);
       }
     }
     .moderator {
       .message {
-        margin-right: auto;
+        margin-left: auto;
         background: use(highlight-tertiary);
         color: use(highlight-primary);
       }
