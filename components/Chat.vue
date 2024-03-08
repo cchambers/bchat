@@ -163,13 +163,18 @@ onMounted(async () => {
   .output {
     height: 100%;
     flex-shrink: 1;
-    padding: use(ss);
+    padding: 0 use(ss);
+    > div:first-child {
+      .message {
+        margin-bottom: 0;
+      }
+    }
     .message {
       padding: use(sss) use(ss);
       border-radius: use(sss);
       width: max-content;
       max-width: 60%;
-      margin-bottom: use(s);
+      margin-bottom: use(ss);
     }
     .customer {
       .message {
