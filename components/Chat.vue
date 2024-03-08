@@ -1,24 +1,21 @@
 <script setup>
 import { useBus } from "@/utils/event-bus";
 import SendbirdChat from "@sendbird/chat";
-import { OpenChannelModule } from "@sendbird/chat/openChannel";
+import {
+  OpenChannelModule,
+  OpenChannelHandler,
+} from "@sendbird/chat/openChannel";
 const sb = inject("SendBird");
 
 const user = ref(null);
 
-try {
-  user.value = await sb.connect("DEV01");
-  // The user is connected to Sendbird server.
-} catch (err) {
-  // Handle error.
-}
 const customer = ref(null);
 const md = inject("md");
 const props = defineProps({
   channel: String,
 });
 const input = ref(null);
-const pastMessages = ref(history);
+const pastMessages = ref([]);
 const textareaRef = ref(null);
 const autoResize = (e) => {
   if (textareaRef.value) {
@@ -31,63 +28,84 @@ const autoResize = (e) => {
 };
 
 const currentChannel = ref(null);
-
+const loading = ref(false);
 const handleInput = async () => {
+  loading.value = true;
   const messageText = input.value.trim();
-  currentChannel.value.sendUserMessage(messageText, (message, error) => {
-    if (error) {
-      console.error(error);
-      return;
-    }
+  // console.log("HANDLING", messageText);
 
-    pastMessages.unshift(message);
+  const params = {
+    message: messageText,
+  };
+  currentChannel.value.sendUserMessage(params).onSucceeded((message) => {
+    console.log(message);
+    pastMessages.value.unshift({
+      message: message.message,
+      sender: message.sender.userId,
+    });
     input.value = "";
+    loading.value = false;
   });
 };
 
-const loadMessage = (data) => {
-  pastMessages.value.unshift(data);
-};
-
-const loadPreviousMessages = (channel) => {
-  const messageListQuery = channel.createPreviousMessageListQuery();
-
-  messageListQuery.limit = 20; // Number of messages to retrieve
-  messageListQuery.reverse = false; // Set to true if you want the latest message first
-
-  messageListQuery.load((messages, error) => {
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    pastMessages.value = [...messages];
-  });
+const loadPreviousMessages = async (channel) => {
+  const params = {
+    limit: 20,
+    reverse: true,
+  };
+  const query = channel.createPreviousMessageListQuery(params);
+  try {
+    console.log("LOADING PREVIOUS...");
+    const messages = await query.load();
+    console.log(Object.keys(messages[0].message));
+    pastMessages.value = messages.map((item) => {
+      const obj = {
+        sender: item.sender.userId,
+        message: item.message,
+      };
+      return obj;
+    });
+    // console.log("M", messages);
+    console.log("P", pastMessages);
+  } catch (e) {
+    // Handle error
+  }
+  console.log(pastMessages.value);
 };
 
 const enterChannel = async () => {
-  const channel = await sb.OpenChannel.getChannel(props.channel);
+  const channel = await sb.openChannel.getChannel(props.channel);
   await channel.enter();
   currentChannel.value = channel;
+  // console.log("CURRENT", currentChannel.value);
   loadPreviousMessages(channel);
   setupEventListeners(channel);
 };
 
 const setupEventListeners = (channel) => {
-  const ChannelHandler = new sb.ChannelHandler();
+  const channelHandler = new OpenChannelHandler({
+    onMessageReceived: (channel, message) => {
+      pastMessages.value.unshift(message);
+    },
+  });
 
-  ChannelHandler.onMessageReceived = (channel, message) => {
-    pastMessages.unshift(message);
-  };
-
-  sb.addChannelHandler(`channel:${chatroom}`, ChannelHandler);
+  sb.openChannel.addOpenChannelHandler(
+    `channel:${props.channel}`,
+    channelHandler
+  );
 };
 
-onMounted(() => {
-  enterChannel();
+onMounted(async () => {
   if (process.client) {
     const c = window.localStorage.getItem("customer");
     if (c) customer.value = c;
+    try {
+      user.value = await sb.connect(customer.value);
+      // The user is connected to Sendbird server.
+    } catch (err) {
+      // Handle error.
+    }
+    enterChannel();
   }
 });
 </script>
@@ -97,13 +115,13 @@ onMounted(() => {
     <div class="output">
       <div
         v-for="m in pastMessages"
-        v-bind:key="m.id"
+        v-bind:key="m"
         :class="{ customer: m.customer, moderator: m.owner }"
       >
-        <!-- <div class="message" v-if="m.type == 'embed'">
+        <div class="message" v-if="m.type == 'embed'">
           <ChatEmbed :data="m.message" />
-        </div> -->
-        <div class="message">{{ m._sender.userId }}: {{ m.message }};</div>
+        </div>
+        <div class="message">{{ m.sender }}: {{ m.message }}</div>
       </div>
     </div>
     <div class="input" @keydown.enter.prevent="handleInput">
@@ -111,6 +129,7 @@ onMounted(() => {
         v-model="input"
         ref="textareaRef"
         rows="1"
+        :disabled="loading"
         @keyup="autoResize"
         @keydown.enter.shift.exact.stop
       ></textarea>

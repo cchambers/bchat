@@ -26,7 +26,6 @@ const joinChannel = async () => {
     }
   });
 
-  console.log("test", channels);
   if (!channels.length) {
     console.log("Channel does not exist.");
     await createChannel();
