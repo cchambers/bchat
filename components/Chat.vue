@@ -116,7 +116,10 @@ onMounted(async () => {
       <div
         v-for="m in pastMessages"
         v-bind:key="m"
-        :class="{ customer: m.customer, moderator: m.owner }"
+        :class="{
+          customer: m.sender == customer,
+          moderator: !(m.sender == customer),
+        }"
       >
         <div class="message" v-if="m.type == 'embed'">
           <ChatEmbed :data="m.message" />
