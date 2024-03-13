@@ -184,7 +184,7 @@ onMounted(async () => {
         @keyup="autoResize"
         @keydown.enter.shift.exact.stop
       ></textarea>
-      <button><i class="material-icons">add_a_photo</i></button>
+      <button><i class="material-icons">send</i></button>
     </div>
   </div>
 </template>
@@ -284,7 +284,7 @@ onMounted(async () => {
   .input {
     display: flex;
     padding: use(ss);
-    padding-bottom: use(base);
+    // padding-bottom: use(base);
     @include box-shadow(3);
     textarea {
       border: 0;
