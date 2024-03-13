@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
   data: Array,
+  current: String,
 });
 
 const switchTo = (channel) => {
@@ -11,9 +12,13 @@ const switchTo = (channel) => {
 <template>
   <div class="channel-list">
     <ul>
-      <li v-for="channel in props.data" v-bind:key="channel.id">
+      <li
+        v-for="channel in props.data"
+        v-bind:key="channel.id"
+        :class="{ active: channel._url == props.current }"
+      >
         <button @click="switchTo(channel._url)">
-          Switch to {{ channel._name }}
+          {{ channel._name.split(":")[0] }}
         </button>
       </li>
     </ul>
@@ -24,11 +29,27 @@ const switchTo = (channel) => {
 .channel-list {
   ul {
     list-style: none;
-    padding: use(s);
+    padding: use(ss);
+    display: flex;
+    flex-direction: column;
+  }
+  li {
+    order: 2;
+    padding-bottom: use(ss);
   }
   button {
     width: 100%;
     border: 1px solid use(accent-primary);
+    padding: use(s);
+    border-radius: use(sss);
+  }
+  .active {
+    order: 1;
+    button {
+      background: use(accent-primary);
+      color: use(highlight-primary);
+      pointer-events: none;
+    }
   }
 }
 </style>

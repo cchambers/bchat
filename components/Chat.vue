@@ -29,6 +29,7 @@ const autoResize = (e) => {
   }
 };
 
+const showChannels = ref(false);
 const currentChannel = ref(null);
 const loading = ref(false);
 const handleInput = async () => {
@@ -180,8 +181,13 @@ onMounted(async () => {
 
 <template>
   <div class="chat-wrapper">
-    <div class="channels low-off" v-if="userChannels">
-      <ChannelList :data="userChannels" />
+    <div class="channels" :class="{ active: showChannels }" v-if="userChannels">
+      <ChannelList :data="userChannels" :current="props.channel" />
+      <div class="channels-button">
+        <button @click="showChannels = !showChannels">
+          <i class="material-icons">list</i>
+        </button>
+      </div>
     </div>
     <div class="chat-component">
       <div class="output">
@@ -226,9 +232,47 @@ onMounted(async () => {
 .chat-wrapper {
   width: 100%;
   display: flex;
+
+  .channels-button {
+    position: absolute;
+    top: 3rem;
+    right: -4rem;
+    button {
+      padding: use(ss) use(sss);
+      background: use(accent-primary);
+      height: 100%;
+      width: 4rem;
+      flex-shrink: 0;
+      border-radius: 0 use(sss) use(sss) 0;
+
+      i {
+        font-size: 2.2rem;
+        color: use(highlight-primary);
+      }
+    }
+  }
 }
 .channels {
   background: use(highlight-secondary);
+  transition: all 200ms $decel;
+  border-right: 2px solid use(accent-primary);
+  @include low {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 20rem;
+    pointer-events: none;
+    z-index: 1;
+    transform: translateZ(0) translateX(-100%);
+    button {
+      pointer-events: all;
+    }
+  }
+  &.active {
+    transform: translateZ(0) translateX(0);
+    pointer-events: all;
+  }
 }
 .chat-component {
   display: flex;
