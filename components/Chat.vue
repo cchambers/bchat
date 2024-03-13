@@ -83,7 +83,7 @@ const formatDate = (d) => {
 
   // Check if the input date is "today"
   if (testDate.setHours(0, 0, 0, 0) === todayStart.getTime()) {
-    return `Today - ${formattedTime}`;
+    return `Today · ${formattedTime}`;
   }
 
   return new Intl.DateTimeFormat("en-US", options).format(inputDate);
@@ -137,6 +137,30 @@ const setupEventListeners = (channel) => {
   );
 };
 
+const userChannels = ref(null);
+
+const loadChannels = async () => {
+  console.log("fetching user channels");
+
+  const params = {
+    nameKeyword: `${customer.value}`,
+  };
+  const query = sb.openChannel.createOpenChannelListQuery(params);
+
+  const channels = await query.next((channels, error) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+  });
+
+  if (!channels.length) {
+    console.log("Channel does not exist.");
+  } else {
+    userChannels.value = channels;
+  }
+  console.log("CHANNELS", userChannels.value);
+};
 onMounted(async () => {
   if (process.client) {
     const c = window.localStorage.getItem("customer");
@@ -146,55 +170,72 @@ onMounted(async () => {
       // The user is connected to Sendbird server.
     } catch (err) {
       // Handle error.
+    } finally {
+      enterChannel();
+      loadChannels();
     }
-    enterChannel();
   }
 });
 </script>
 
 <template>
-  <div class="chat-component">
-    <div class="output">
-      <div
-        v-for="m in pastMessages"
-        v-bind:key="m"
-        :class="{
-          customer: m.sender == customer,
-          moderator: !(m.sender == customer),
-        }"
-      >
-        <div
-          class="message"
-          v-if="m.type == 'embed'"
-          :data-timestamp="m.timestamp"
-        >
-          <ChatEmbed :data="m.message" />
-        </div>
-        <div class="message" :data-timestamp="m.timestamp">{{ m.message }}</div>
-      </div>
+  <div class="chat-wrapper">
+    <div class="channels low-off" v-if="userChannels">
+      <ChannelList :data="userChannels" />
     </div>
-    <div class="input" @keydown.enter.prevent="handleInput">
-      <button><i class="material-icons">add</i></button>
-      <textarea
-        v-model="input"
-        ref="textareaRef"
-        placeholder="Write messages"
-        rows="1"
-        :disabled="loading"
-        @keyup="autoResize"
-        @keydown.enter.shift.exact.stop
-      ></textarea>
-      <button><i class="material-icons">send</i></button>
+    <div class="chat-component">
+      <div class="output">
+        <div
+          v-for="m in pastMessages"
+          v-bind:key="m"
+          :class="{
+            customer: m.sender == customer,
+            moderator: !(m.sender == customer),
+          }"
+        >
+          <div
+            class="message"
+            v-if="m.type == 'embed'"
+            :data-timestamp="m.timestamp"
+          >
+            <ChatEmbed :data="m.message" />
+          </div>
+          <div class="message" :data-timestamp="m.timestamp">
+            {{ m.message }}
+          </div>
+        </div>
+      </div>
+      <div class="input" @keydown.enter.prevent="handleInput">
+        <button><i class="material-icons">add</i></button>
+        <textarea
+          v-model="input"
+          ref="textareaRef"
+          placeholder="Write messages"
+          rows="1"
+          :disabled="loading"
+          @keyup="autoResize"
+          @keydown.enter.shift.exact.stop
+        ></textarea>
+        <button @click="handleInput"><i class="material-icons">send</i></button>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss">
+.chat-wrapper {
+  width: 100%;
+  display: flex;
+}
+.channels {
+  background: use(highlight-secondary);
+}
 .chat-component {
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
+  flex-grow: 2;
   .controls {
     position: fixed;
     top: 6rem;
