@@ -183,7 +183,7 @@ onMounted(async () => {
   <div class="chat-wrapper">
     <div class="channels" :class="{ active: showChannels }" v-if="userChannels">
       <ChannelList :data="userChannels" :current="props.channel" />
-      <div class="channels-button">
+      <div class="channels-button high-off">
         <button @click="showChannels = !showChannels">
           <i class="material-icons">list</i>
         </button>
