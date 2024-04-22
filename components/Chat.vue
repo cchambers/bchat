@@ -37,8 +37,6 @@ const loading = ref(false);
 const handleInput = async () => {
   loading.value = true;
   const messageText = input.value.trim();
-  // console.log("HANDLING", messageText);
-
   const params = {
     message: messageText,
   };
@@ -47,6 +45,8 @@ const handleInput = async () => {
       message: message.message,
       sender: customer.value,
       timestamp: message.createdAt,
+      type: message.messageType,
+      url: message.plainUrl || false,
     });
     input.value = "";
     loading.value = false;
@@ -99,13 +99,14 @@ const loadPreviousMessages = async (channel) => {
   };
   const query = channel.createPreviousMessageListQuery(params);
   try {
-    console.log("LOADING PREVIOUS...");
     const messages = await query.load();
     pastMessages.value = messages.map((item) => {
       const obj = {
         sender: !item.sender ? "Admin" : item.sender.userId,
         message: item.message,
         timestamp: formatDate(item.createdAt),
+        type: item.messageType,
+        url: item.plainUrl || false,
       };
       return obj;
     });
@@ -138,6 +139,62 @@ const setupEventListeners = (channel) => {
 
 const userChannels = ref(null);
 
+const fileInput = ref(null);
+
+const onImageUploadClick = () => {
+  fileInput.value.click();
+};
+
+const handleImageUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file.type.startsWith("image/")) {
+    alert("Please select an image.");
+    return;
+  }
+
+  loading.value = true;
+
+  try {
+    const params = {};
+    params.file = file;
+    params.fileName = file.name;
+    params.fileSize = file.size;
+
+    await currentChannel.value
+      .sendFileMessage(params)
+      .onSucceeded((message) => {
+        pastMessages.value.unshift({
+          message: message.message,
+          sender: customer.value,
+          timestamp: message.createdAt,
+          type: message.messageType,
+          url: message.plainUrl || false,
+        });
+        // input.value = "";
+        loading.value = false;
+      });
+    // Reset file input
+    event.target.value = null;
+
+    console.log("Image uploaded successfully");
+  } catch (error) {
+    console.error("Error uploading image", error);
+  } finally {
+    loading.value = false;
+  }
+};
+const isImageFilename = (filename) => {
+  return /\.(jpg|jpeg|png|gif)$/i.test(filename);
+};
+
+const handleFile = (url) => {
+  if (isImageFilename(url)) {
+    return `<div class='image' style="background-image: url(${url})"></div>`;
+  } else {
+    return "LINK";
+  }
+};
+
 onMounted(async () => {
   if (process.client) {
     const c = window.localStorage.getItem("customer");
@@ -153,6 +210,10 @@ onMounted(async () => {
       enterChannel();
     }
   }
+});
+
+onUnmounted(() => {
+  sb.disconnect();
 });
 </script>
 
@@ -184,12 +245,17 @@ onMounted(async () => {
             <ChatEmbed :data="m.message" />
           </div>
           <div class="message" :data-timestamp="m.timestamp">
-            {{ m.message }}
+            <template v-if="m.type != 'file'">{{ m.message }}</template>
+            <template v-else>
+              <div v-html="handleFile(m.url)"></div>
+            </template>
           </div>
         </div>
       </div>
       <div class="input" @keydown.enter.prevent="handleInput">
-        <button><i class="material-icons">add</i></button>
+        <button @click="onImageUploadClick">
+          <i class="material-icons">add</i>
+        </button>
         <textarea
           v-model="input"
           ref="textareaRef"
@@ -199,6 +265,12 @@ onMounted(async () => {
           @keyup="autoResize"
           @keydown.enter.shift.exact.stop
         ></textarea>
+        <input
+          type="file"
+          ref="fileInput"
+          class="off"
+          @change="handleImageUpload"
+        />
         <button @click="handleInput"><i class="material-icons">send</i></button>
       </div>
     </div>
@@ -374,6 +446,13 @@ onMounted(async () => {
         color: use(accent-primary);
       }
     }
+  }
+
+  .image {
+    height: 20rem;
+    width: 20rem;
+    background-position: center center;
+    background-size: contain;
   }
 }
 </style>

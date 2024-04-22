@@ -21,7 +21,6 @@ const findGroupChannel = async () => {
 
   const channels = await query.next();
 
-  console.log("TEST", channels);
   if (channels.length) {
     sburl.value = channels[0]._url;
   }
@@ -35,12 +34,18 @@ onMounted(async () => {
 
     await findGroupChannel();
     if (sburl.value) {
-      navigateTo(`/chat/${sburl.value}`);
+      setTimeout(() => {
+        navigateTo(`/chat/${sburl.value}`);
+      }, 1500);
     }
   } catch (err) {
     // Handle error.
     console.log(err);
   }
+});
+
+onUnmounted(() => {
+  sb.disconnect();
 });
 // check if channel exists
 </script>
@@ -48,6 +53,37 @@ onMounted(async () => {
   <div>
     <div>token: {{ token }}</div>
     <div>channel name: {{ customer }}</div>
-    <div>sendbird channel url: {{ sburl }}</div>
+    <div class="flex start align-middle">
+      sendbird channel url:
+      <template v-if="sburl">
+        {{ sburl }}
+      </template>
+      <div class="loading" v-else></div>
+    </div>
   </div>
 </template>
+<style lang="scss">
+.loading {
+  width: 10rem;
+  height: use(s);
+  background-image: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0) 40%,
+    rgba(2, 2, 2, 0.2) 50%,
+    rgba(0, 212, 255, 0) 60%
+  );
+  background-size: 300%;
+  background-position-x: center;
+  animation: loading 500ms linear infinite;
+  border: 1px solid use(lowlight-primary);
+}
+
+@keyframes loading {
+  0% {
+    background-position-x: 100%;
+  }
+  100% {
+    background-position-x: 0%;
+  }
+}
+</style>
