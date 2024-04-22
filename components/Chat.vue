@@ -1,12 +1,7 @@
 <script setup>
 const sb = inject("SendBird");
-import { useBus } from "@/utils/event-bus";
-import SendbirdChat from "@sendbird/chat";
 
-import {
-  GroupChannelModule,
-  GroupChannelHandler,
-} from "@sendbird/chat/groupChannel";
+import { GroupChannelHandler } from "@sendbird/chat/groupChannel";
 
 const user = ref(null);
 
@@ -237,15 +232,10 @@ onUnmounted(() => {
             moderator: !(m.sender == customer),
           }"
         >
-          <div
-            class="message"
-            v-if="m.type == 'embed'"
-            :data-timestamp="m.timestamp"
-          >
-            <ChatEmbed :data="m.message" />
-          </div>
           <div class="message" :data-timestamp="m.timestamp">
-            <template v-if="m.type != 'file'">{{ m.message }}</template>
+            <template v-if="m.type != 'file'">
+              <div v-html="md.makeHtml(m.message)"></div>
+            </template>
             <template v-else>
               <div v-html="handleFile(m.url)"></div>
             </template>
