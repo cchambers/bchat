@@ -1,11 +1,12 @@
 <script setup>
+const sb = inject("SendBird");
 import { useBus } from "@/utils/event-bus";
 import SendbirdChat from "@sendbird/chat";
+
 import {
-  OpenChannelModule,
-  OpenChannelHandler,
-} from "@sendbird/chat/openChannel";
-const sb = inject("SendBird");
+  GroupChannelModule,
+  GroupChannelHandler,
+} from "@sendbird/chat/groupChannel";
 
 const user = ref(null);
 
@@ -117,7 +118,7 @@ const loadPreviousMessages = async (channel) => {
 };
 
 const enterChannel = async () => {
-  const channel = await sb.openChannel.getChannel(props.channel);
+  const channel = await sb.groupChannel.getChannel(props.channel);
   await channel.enter();
   currentChannel.value = channel;
   // console.log("CURRENT", currentChannel.value);
@@ -126,13 +127,13 @@ const enterChannel = async () => {
 };
 
 const setupEventListeners = (channel) => {
-  const channelHandler = new OpenChannelHandler({
+  const channelHandler = new GroupChannelHandler({
     onMessageReceived: (channel, message) => {
       pastMessages.value.unshift(message);
     },
   });
 
-  sb.openChannel.addOpenChannelHandler(
+  sb.groupChannel.addGroupChannelHandler(
     `channel:${props.channel}`,
     channelHandler
   );
@@ -146,7 +147,7 @@ const loadChannels = async () => {
   const params = {
     nameKeyword: `${customer.value}`,
   };
-  const query = sb.openChannel.createOpenChannelListQuery(params);
+  const query = sb.groupChannel.createGroupChannelListQuery(params);
 
   const channels = await query.next((channels, error) => {
     if (error) {

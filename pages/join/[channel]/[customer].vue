@@ -14,9 +14,9 @@ const joinChannel = async () => {
   console.log("joinChannel()");
 
   const params = {
-    nameKeyword: actual.value,
+    channelNameContainsFilter: actual.value,
   };
-  const query = sb.openChannel.createOpenChannelListQuery(params);
+  const query = sb.openChannel.createPublicGroupChannelListQuery(params);
 
   const channels = await query.next((channels, error) => {
     console.log("Next");
@@ -28,36 +28,12 @@ const joinChannel = async () => {
 
   if (!channels.length) {
     console.log("Channel does not exist.");
-    await createChannel();
+    alert("Channel not found.");
   } else {
     sburl.value = channels[0]._url;
   }
 
   if (sburl.value) navigateTo(`/chat/${sburl.value}`);
-};
-
-const createChannel = async () => {
-  console.log("Attempting to create channel...");
-  const params = {
-    name: actual.value,
-  };
-
-  // Create a new Open Channel
-  const newChannel = await sb.openChannel.createChannel(
-    params,
-    function (openChannel, error) {
-      if (error) {
-        console.error("Error creating new Open Channel:", error);
-        return;
-      }
-
-      console.log("Created new Open Channel:", openChannel.url);
-      sburl.value = openChannel.url;
-      // navigateTo(`/chat/${openChannel.url}`);
-    }
-  );
-
-  if (newChannel) sburl.value = newChannel._url;
 };
 
 onMounted(async () => {
