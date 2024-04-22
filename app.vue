@@ -7,10 +7,14 @@ const md = new Showdown.Converter();
 provide("md", md);
 
 import SendbirdChat from "@sendbird/chat";
-import { OpenChannelModule } from "@sendbird/chat/openChannel";
+
+import {
+  GroupChannelModule,
+  GroupChannelHandler,
+} from "@sendbird/chat/groupChannel";
 const sb = SendbirdChat.init({
   appId: "E567A9C9-721F-46E9-AE1B-5EA2296DB460",
-  modules: [new OpenChannelModule()],
+  modules: [new GroupChannelModule()],
 });
 
 provide("SendBird", sb);

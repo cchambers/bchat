@@ -11,6 +11,7 @@ import {
 const user = ref(null);
 
 const customer = ref(null);
+const token = ref(null);
 const md = inject("md");
 const props = defineProps({
   channel: String,
@@ -42,10 +43,10 @@ const handleInput = async () => {
     message: messageText,
   };
   currentChannel.value.sendUserMessage(params).onSucceeded((message) => {
-    console.log(message);
     pastMessages.value.unshift({
       message: message.message,
-      sender: message.sender.userId,
+      sender: customer.value,
+      timestamp: message.createdAt,
     });
     input.value = "";
     loading.value = false;
@@ -90,10 +91,7 @@ const formatDate = (d) => {
 
   return new Intl.DateTimeFormat("en-US", options).format(inputDate);
 };
-
 // Example usage:
-console.log(formatDate(new Date())); // Should print something like "Today - [timestamp]"
-
 const loadPreviousMessages = async (channel) => {
   const params = {
     limit: 20,
@@ -105,7 +103,7 @@ const loadPreviousMessages = async (channel) => {
     const messages = await query.load();
     pastMessages.value = messages.map((item) => {
       const obj = {
-        sender: item.sender.userId,
+        sender: !item.sender ? "Admin" : item.sender.userId,
         message: item.message,
         timestamp: formatDate(item.createdAt),
       };
@@ -119,9 +117,8 @@ const loadPreviousMessages = async (channel) => {
 
 const enterChannel = async () => {
   const channel = await sb.groupChannel.getChannel(props.channel);
-  await channel.enter();
+  // await channel.enter();
   currentChannel.value = channel;
-  // console.log("CURRENT", currentChannel.value);
   loadPreviousMessages(channel);
   setupEventListeners(channel);
 };
@@ -141,40 +138,19 @@ const setupEventListeners = (channel) => {
 
 const userChannels = ref(null);
 
-const loadChannels = async () => {
-  console.log("fetching user channels");
-
-  const params = {
-    nameKeyword: `${customer.value}`,
-  };
-  const query = sb.groupChannel.createGroupChannelListQuery(params);
-
-  const channels = await query.next((channels, error) => {
-    if (error) {
-      console.error(error);
-      return;
-    }
-  });
-
-  if (!channels.length) {
-    console.log("Channel does not exist.");
-  } else {
-    userChannels.value = channels;
-  }
-  console.log("CHANNELS", userChannels.value);
-};
 onMounted(async () => {
   if (process.client) {
     const c = window.localStorage.getItem("customer");
     if (c) customer.value = c;
+    const t = window.localStorage.getItem("token");
+    if (t) token.value = t;
     try {
-      user.value = await sb.connect(customer.value);
+      user.value = await sb.connect(customer.value, token.value);
       // The user is connected to Sendbird server.
     } catch (err) {
       // Handle error.
     } finally {
       enterChannel();
-      loadChannels();
     }
   }
 });
