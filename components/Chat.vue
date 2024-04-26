@@ -86,6 +86,18 @@ const formatDate = (d) => {
 
   return new Intl.DateTimeFormat("en-US", options).format(inputDate);
 };
+
+const formatObj = (message) => {
+  const obj = {
+    sender: !message.sender ? "Admin" : message.sender.userId,
+    message: message.message,
+    timestamp: formatDate(message.createdAt),
+    type: message.messageType,
+    url: message.plainUrl || false,
+  };
+
+  return obj;
+};
 // Example usage:
 const loadPreviousMessages = async (channel) => {
   const params = {
@@ -96,13 +108,7 @@ const loadPreviousMessages = async (channel) => {
   try {
     const messages = await query.load();
     pastMessages.value = messages.map((item) => {
-      const obj = {
-        sender: !item.sender ? "Admin" : item.sender.userId,
-        message: item.message,
-        timestamp: formatDate(item.createdAt),
-        type: item.messageType,
-        url: item.plainUrl || false,
-      };
+      const obj = formatObj(item);
       return obj;
     });
   } catch (e) {
@@ -122,7 +128,8 @@ const enterChannel = async () => {
 const setupEventListeners = (channel) => {
   const channelHandler = new GroupChannelHandler({
     onMessageReceived: (channel, message) => {
-      pastMessages.value.unshift(message);
+      const obj = formatObj(message);
+      pastMessages.value.unshift(obj);
     },
   });
 
