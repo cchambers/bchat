@@ -16,7 +16,9 @@ export default defineNuxtConfig({
     },
   },
   css: ["@/assets/scss/base.scss"],
-
+  // serverMiddleware: [
+  //   { path: '/api/swap-topics', handler: '~/middleware/swapTopics.js' },
+  // ],
   build: {
     cssSourceMap: false,
     loaders: {
