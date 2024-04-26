@@ -46,9 +46,9 @@ onMounted(async () => {
   }
 });
 
-onUnmounted(() => {
-  sb.disconnect();
-});
+// onUnmounted(() => {
+//   sb.disconnect();
+// });
 // check if channel exists
 </script>
 <template>
