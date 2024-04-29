@@ -154,7 +154,13 @@ const handleImageUpload = async (event) => {
   // }
 
   loading.value = true;
-  status.value = "uploading a file...";
+  status.value = `
+    <div class="flex start align-middle">
+      <div class="px-12 pad-r-ss">
+        <i class="material-icons">backup</i>
+      </div>
+      <div class="state-success">uploading a file...</div>
+    </div>`;
   try {
     const params = {};
     params.file = file;
@@ -173,7 +179,7 @@ const handleImageUpload = async (event) => {
 
     console.log("Image uploaded successfully");
   } catch (error) {
-    status.value = "There was an error uploading the file.";
+    status.value = `<div class="state-error">There was an error uploading the file.</div>`;
     console.error("Error uploading image", error);
   } finally {
     loading.value = false;
@@ -251,9 +257,12 @@ onUnmounted(() => {
         </div>
         <div class="last" ref="lastElementRef"></div>
       </div>
-      <div class="status pad-x-s pad-y-s" ref="statusRef" v-if="status">
-        {{ status }}
-      </div>
+      <div
+        class="status pad-x-s pad-y-s"
+        ref="statusRef"
+        v-if="status"
+        v-html="status"
+      ></div>
       <div class="input" @keydown.enter.prevent="handleInput">
         <button @click="onImageUploadClick">
           <i class="material-icons">add</i>

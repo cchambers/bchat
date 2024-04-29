@@ -6,6 +6,7 @@ const actual = ref(`${customer}`);
 const sburl = ref(null);
 const sb = inject("SendBird");
 const conn = inject("conn");
+const error = ref(null);
 
 const user = ref(null);
 if (process.client) {
