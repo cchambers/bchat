@@ -12,6 +12,8 @@ const props = defineProps({
   channel: String,
 });
 const input = ref(null);
+const statusRef = ref(null);
+const status = ref(null);
 const pastMessages = ref([]);
 const textareaRef = ref(null);
 const autoResize = (e) => {
@@ -90,6 +92,8 @@ const formatObj = (message) => {
     url: message.plainUrl || false,
   };
 
+  if (message.name) obj.name = message.name;
+
   return obj;
 };
 // Example usage:
@@ -149,7 +153,7 @@ const handleImageUpload = async (event) => {
   // }
 
   loading.value = true;
-
+  status.value = "uploading a file...";
   try {
     const params = {};
     params.file = file;
@@ -160,7 +164,7 @@ const handleImageUpload = async (event) => {
       .sendFileMessage(params)
       .onSucceeded((message) => {
         pastMessages.value.unshift(formatObj(message));
-        // input.value = "";
+        status.value = "";
         loading.value = false;
       });
     // Reset file input
@@ -168,6 +172,7 @@ const handleImageUpload = async (event) => {
 
     console.log("Image uploaded successfully");
   } catch (error) {
+    status.value = "There was an error uploading the file.";
     console.error("Error uploading image", error);
   } finally {
     loading.value = false;
@@ -177,11 +182,11 @@ const isImageFilename = (filename) => {
   return /\.(jpg|jpeg|png|gif)$/i.test(filename);
 };
 
-const handleFile = (url) => {
-  if (isImageFilename(url)) {
-    return `<div class='image' style="background-image: url(${url})"></div>`;
+const handleFile = (m) => {
+  if (isImageFilename(m.url)) {
+    return `<div class='image' style="background-image:url(${m.url})"></div><p>${m.name}</p>`;
   } else {
-    return md.makeHtml(`[${url}](${url})`);
+    return md.makeHtml(`[${m.name}](${m.url})`);
   }
 };
 
@@ -232,10 +237,13 @@ onUnmounted(() => {
               <div v-html="md.makeHtml(m.message)"></div>
             </template>
             <template v-else>
-              <div v-html="handleFile(m.url)"></div>
+              <div v-html="handleFile(m)"></div>
             </template>
           </div>
         </div>
+      </div>
+      <div class="status pad-x-s pad-y-s" ref="statusRef" v-if="status">
+        {{ status }}
       </div>
       <div class="input" @keydown.enter.prevent="handleInput">
         <button @click="onImageUploadClick">
