@@ -36,13 +36,7 @@ const handleInput = async () => {
     message: messageText,
   };
   currentChannel.value.sendUserMessage(params).onSucceeded((message) => {
-    pastMessages.value.unshift({
-      message: message.message,
-      sender: customer.value,
-      timestamp: message.createdAt,
-      type: message.messageType,
-      url: message.plainUrl || false,
-    });
+    pastMessages.value.unshift(formatObj(message));
     input.value = "";
     loading.value = false;
   });
@@ -129,7 +123,7 @@ const setupEventListeners = (channel) => {
   const channelHandler = new GroupChannelHandler({
     onMessageReceived: (channel, message) => {
       const obj = formatObj(message);
-      pastMessages.value.unshift(obj);
+      pastMessages.value.unshift(formatObj(obj));
     },
   });
 
@@ -149,10 +143,10 @@ const onImageUploadClick = () => {
 
 const handleImageUpload = async (event) => {
   const file = event.target.files[0];
-  if (!file.type.startsWith("image/")) {
-    alert("Please select an image.");
-    return;
-  }
+  // if (!file.type.startsWith("image/")) {
+  //   alert("Please select an image.");
+  //   return;
+  // }
 
   loading.value = true;
 
@@ -165,13 +159,7 @@ const handleImageUpload = async (event) => {
     await currentChannel.value
       .sendFileMessage(params)
       .onSucceeded((message) => {
-        pastMessages.value.unshift({
-          message: message.message,
-          sender: customer.value,
-          timestamp: message.createdAt,
-          type: message.messageType,
-          url: message.plainUrl || false,
-        });
+        pastMessages.value.unshift(formatObj(message));
         // input.value = "";
         loading.value = false;
       });
@@ -193,7 +181,7 @@ const handleFile = (url) => {
   if (isImageFilename(url)) {
     return `<div class='image' style="background-image: url(${url})"></div>`;
   } else {
-    return "LINK";
+    return md.makeHtml(`[${url}](${url})`);
   }
 };
 
@@ -373,9 +361,15 @@ onUnmounted(() => {
         bottom: -1.4rem;
         display: block;
         width: max-content;
-        color: gray;
+        color: use(lowlight-quaternary);
         white-space: pre;
         font-size: 1rem;
+      }
+      a {
+        color: use(highlight-primary);
+        &:hover {
+          color: use(accent-quaternary);
+        }
       }
     }
     .customer {
