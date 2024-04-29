@@ -159,7 +159,7 @@ const handleImageUpload = async (event) => {
       <div class="px-12 pad-r-ss">
         <i class="material-icons">backup</i>
       </div>
-      <div class="state-success">uploading a file...</div>
+      <div>uploading a file...</div>
     </div>`;
   try {
     const params = {};
