@@ -16,6 +16,7 @@ const statusRef = ref(null);
 const status = ref(null);
 const pastMessages = ref([]);
 const textareaRef = ref(null);
+const lastElementRef = ref(null);
 const autoResize = (e) => {
   if (textareaRef.value) {
     nextTick(() => {
@@ -183,11 +184,18 @@ const isImageFilename = (filename) => {
 };
 
 const handleFile = (m) => {
+  let message = "";
   if (isImageFilename(m.url)) {
-    return `<div class='image' style="background-image:url(${m.url})"></div><p>${m.name}</p>`;
-  } else {
-    return md.makeHtml(`[${m.name}](${m.url})`);
+    message += `<div class='image' style="background-image:url(${m.url})"></div>`;
   }
+
+  message += `<div class="file flex start align-middle">
+              <div class="px-12 pad-r-ss">
+                <i class="material-icons">description</i>
+              </div>
+              <a href="${m.url}">${m.name}</a>
+            </div>`;
+  return message;
 };
 
 onMounted(async () => {
@@ -241,6 +249,7 @@ onUnmounted(() => {
             </template>
           </div>
         </div>
+        <div class="last" ref="lastElementRef"></div>
       </div>
       <div class="status pad-x-s pad-y-s" ref="statusRef" v-if="status">
         {{ status }}
@@ -452,6 +461,9 @@ onUnmounted(() => {
     width: 20rem;
     background-position: center center;
     background-size: contain;
+  }
+  .file {
+    font-family: monospace;
   }
 }
 </style>
