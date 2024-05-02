@@ -341,7 +341,7 @@ onUnmounted(() => {
   padding: use(sss) use(ss);
   border-radius: use(sss);
   width: max-content;
-  max-width: 60%;
+  max-width: 90%;
   margin-bottom: use(base);
   position: relative;
   &:after {
