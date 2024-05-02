@@ -337,6 +337,39 @@ onUnmounted(() => {
     pointer-events: all;
   }
 }
+.message {
+  padding: use(sss) use(ss);
+  border-radius: use(sss);
+  width: max-content;
+  max-width: 60%;
+  margin-bottom: use(base);
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    transform: rotate(0deg);
+  }
+  &:before {
+    content: attr(data-timestamp);
+    position: absolute;
+    bottom: -1.4rem;
+    display: block;
+    width: max-content;
+    color: use(lowlight-quaternary);
+    white-space: pre;
+    font-size: 1rem;
+  }
+  a {
+    color: use(highlight-primary);
+    &:hover {
+      color: use(accent-quaternary);
+    }
+  }
+}
 .chat-component {
   display: flex;
   flex-direction: column;
@@ -368,39 +401,7 @@ onUnmounted(() => {
     //     margin-bottom: 0;
     //   }
     // }
-    .message {
-      padding: use(sss) use(ss);
-      border-radius: use(sss);
-      width: max-content;
-      max-width: 60%;
-      margin-bottom: use(base);
-      position: relative;
-      &:after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        width: 0px;
-        height: 0px;
-        border-style: solid;
-        transform: rotate(0deg);
-      }
-      &:before {
-        content: attr(data-timestamp);
-        position: absolute;
-        bottom: -1.4rem;
-        display: block;
-        width: max-content;
-        color: use(lowlight-quaternary);
-        white-space: pre;
-        font-size: 1rem;
-      }
-      a {
-        color: use(highlight-primary);
-        &:hover {
-          color: use(accent-quaternary);
-        }
-      }
-    }
+
     .customer {
       .message {
         margin-right: auto;

@@ -10,10 +10,25 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="tc" v-if="content">
-    <div class="image" :style="`background-image: url(${content.image})`"></div>
-    <div class="title wt-bold px-20">
-      <a :href="content.url" target="_new">{{ content.title }}</a>
-    </div>
+  <div class="tc back-highlight-primary pad-ss" v-if="content">
+    <a :href="content.url" target="_new">
+      <div
+        class="image"
+        :style="`background-image: url(${content.image})`"
+      ></div>
+      <div class="title wt-bold px-20">{{ content.title }}</div></a
+    >
   </div>
 </template>
+
+<style lang="scss">
+.tc {
+  border-radius: use(sss);
+  a .title {
+    color: use(lowlight-primary);
+  }
+  a:hover .title {
+    color: use(accent-primary);
+  }
+}
+</style>
