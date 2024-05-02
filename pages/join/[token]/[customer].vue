@@ -19,7 +19,7 @@ const findGroupChannel = async () => {
     includeEmpty: true,
     channelNameContainsFilter: customer,
   };
-  console.log(Object.keys(sb));
+
   const query = sb.groupChannel.createMyGroupChannelListQuery(params);
 
   const channels = await query.next();

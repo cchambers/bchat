@@ -248,7 +248,10 @@ onUnmounted(() => {
         >
           <div class="message" :data-timestamp="m.timestamp">
             <template v-if="m.type != 'file'">
-              <div v-html="md.makeHtml(m.message)"></div>
+              <template v-if="m.message.startsWith('»')">
+                <TopicChange :data="m.message" />
+              </template>
+              <div v-html="md.makeHtml(m.message)" v-else></div>
             </template>
             <template v-else>
               <div v-html="handleFile(m)"></div>
