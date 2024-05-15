@@ -54,10 +54,10 @@ onMounted(async () => {
 </script>
 <template>
   <div>
-    <div>token: {{ token }}</div>
-    <div>channel name: {{ customer }}</div>
+    <div class="off">token: {{ token }}</div>
+    <div class="off">channel name: {{ customer }}</div>
     <div class="flex start align-middle">
-      <div class="div margin-r-s">Finding Channel...</div>
+      <div class="div margin-r-s off">Finding Channel...</div>
       <div class="loading" v-if="!error"></div>
       <div class="error state-error" v-else>{{ error }}</div>
     </div>
