@@ -473,7 +473,7 @@ onUnmounted(() => {
     height: 20rem;
     width: 20rem;
     background-position: center center;
-    background-size: contain;
+    background-size: cover;
   }
   .file {
     font-family: monospace;
