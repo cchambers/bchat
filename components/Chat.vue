@@ -199,8 +199,8 @@ const handleFile = (m) => {
               <div class="px-12 pad-r-ss">
                 <i class="material-icons">description</i>
               </div>
-              <a href="${m.url}">${m.name}</a>
-            </div>`;
+              ${m.name}
+            </div>`; //<a href="${m.url}"></a>
   return message;
 };
 
