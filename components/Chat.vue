@@ -200,7 +200,8 @@ const handleFile = (m) => {
                 <i class="material-icons">description</i>
               </div>
               ${m.name}
-            </div>`; //<a href="${m.url}"></a>
+            </div>`;
+  //<a href="${m.url}"></a>
   return message;
 };
 
