@@ -128,7 +128,7 @@ const setupEventListeners = (channel) => {
   const channelHandler = new GroupChannelHandler({
     onMessageReceived: (channel, message) => {
       const obj = formatObj(message);
-      pastMessages.value.unshift(formatObj(obj));
+      pastMessages.value.unshift(obj);
     },
   });
 
